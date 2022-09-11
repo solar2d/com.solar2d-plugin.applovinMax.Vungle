@@ -4,8 +4,8 @@ local metadata =
 	{
 		format = 'staticLibrary',
 
-		staticLibs = { "ObjC", "c++", "z"},
-		frameworks = {"AppLovinMediationVungleAdapter", "VungleSDK"},
+		staticLibs = { "ObjC", "c++", "z", "VungleAdapter"},
+		frameworks = {"VungleSDK"},
 		frameworksOptional = {"AppTrackingTransparency"},
 	},
 
