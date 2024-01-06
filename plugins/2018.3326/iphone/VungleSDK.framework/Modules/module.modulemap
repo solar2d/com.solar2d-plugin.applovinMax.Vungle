@@ -1,18 +1,11 @@
-framework module VungleSDK {
-  umbrella header "VungleSDK.h"
-  
-  module VungleSDKCreativeTracking {
-      header "VungleSDKCreativeTracking.h"
-  }
-  
-  module VungleSDKHeaderBidding {
-      header "VungleSDKHeaderBidding.h"
-  }
-  
-  module VungleSDK {
-      header "VungleNativeAd.h"
-      header "VungleMediaView.h"
-  }
-  
+framework module VungleAdsSDK {
+  umbrella header "VungleAdsSDK.h"
+
+  export *
   module * { export * }
+}
+
+module VungleAdsSDK.Swift {
+  header "VungleAdsSDK-Swift.h"
+  requires objc
 }

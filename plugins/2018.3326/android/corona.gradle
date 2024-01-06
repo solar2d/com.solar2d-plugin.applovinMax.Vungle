@@ -3,5 +3,5 @@ repositories {
 	mavenCentral()
 }
 dependencies {
-		 implementation 'com.applovin.mediation:vungle-adapter:6.12.1.1'
+	implementation 'com.applovin.mediation:vungle-adapter:7.1.0.0'
 }
