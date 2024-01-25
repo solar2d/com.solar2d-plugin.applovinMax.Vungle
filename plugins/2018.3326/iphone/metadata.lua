@@ -8,7 +8,7 @@ local metadata =
 		-- In this case, the static library is called: libSTATIC_LIB_NAME.a
 		staticLibs =  {"c++", "sqlite3", "z", "VungleAdapter"},
 
-		frameworks = {"VungleSDK"},
+		frameworks = {"VungleAdsSDK"},
 		frameworksOptional = {},
 	},
 
