@@ -10,6 +10,7 @@ local metadata =
 
 		frameworks = {"VungleAdsSDK"},
 		frameworksOptional = {},
+		usesSwift = true,
 	},
 
 }
