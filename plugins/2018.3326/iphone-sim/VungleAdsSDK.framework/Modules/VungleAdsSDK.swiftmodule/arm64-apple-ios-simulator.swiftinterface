@@ -4,9 +4,11 @@
 // swift-module-flags-ignorable: -no-verify-emitted-module-interface
 import AVFAudio
 import AVFoundation
+import AdAttributionKit
 import AdSupport
 import AppTrackingTransparency
 import AudioToolbox
+import CFNetwork
 import CoreTelephony
 import Dispatch
 import Foundation
@@ -18,6 +20,7 @@ import SystemConfiguration
 import UIKit
 @_exported import VungleAdsSDK
 import WebKit
+import _AdAttributionKit_StoreKit
 import _Concurrency
 import _StringProcessing
 import _SwiftConcurrencyShims
@@ -36,21 +39,21 @@ import zlib
   @objc optional func bannerAdDidClick(_ banner: VungleAdsSDK.VungleBanner)
   @objc optional func bannerAdWillLeaveApplication(_ banner: VungleAdsSDK.VungleBanner)
 }
-@available(*, deprecated, message: "BannerSize will be depricated and will be replaced by VungleAdSize")
+@available(*, deprecated, message: "BannerSize will be deprecated and will be replaced by VungleAdSize")
 @objc public enum BannerSize : Swift.Int {
   case regular = 0
   case short = 1
   case leaderboard = 2
   case mrec = 3
   public init?(rawValue: Swift.Int)
-  @available(*, deprecated, message: "BannerSize will be depricated and will be replaced by VungleAdSize")
+  @available(*, deprecated, message: "BannerSize will be deprecated and will be replaced by VungleAdSize")
   public typealias RawValue = Swift.Int
   public var rawValue: Swift.Int {
     get
   }
 }
 @_hasMissingDesignatedInitializers @available(*, deprecated, message: "VungleBanner class will be deprecated and replaced by VungleBannerView class.")
-@objc public class VungleBanner : VungleAdsSDK.BasePublicAd {
+@objc public class VungleBanner : VungleAdsSDK.TemplateAd {
   @objc weak public var delegate: (any VungleAdsSDK.VungleBannerDelegate)?
   @objc public init(placementId: Swift.String, size: VungleAdsSDK.BannerSize)
   @objc public init(placementId: Swift.String, vungleAdSize: VungleAdsSDK.VungleAdSize)
@@ -99,7 +102,7 @@ import zlib
     get
   }
   @objc public var iconImage: UIKit.UIImage? {
-    get
+    @objc get
   }
   @objc public var adOptionsPosition: VungleAdsSDK.NativeAdOptionsPosition
   @objc public init(placementId: Swift.String)
@@ -122,10 +125,10 @@ import zlib
   @objc optional func interstitialAdDidClick(_ interstitial: VungleAdsSDK.VungleInterstitial)
   @objc optional func interstitialAdWillLeaveApplication(_ interstitial: VungleAdsSDK.VungleInterstitial)
 }
-@_inheritsConvenienceInitializers @objc public class VungleInterstitial : VungleAdsSDK.BasePublicAd {
-  @objc weak public var delegate: (any VungleAdsSDK.VungleInterstitialDelegate)?
+@_hasMissingDesignatedInitializers @objc final public class VungleInterstitial : VungleAdsSDK.TemplateAd {
+  @objc weak final public var delegate: (any VungleAdsSDK.VungleInterstitialDelegate)?
   @objc public init(placementId: Swift.String)
-  @objc public func present(with viewController: UIKit.UIViewController)
+  @objc final public func present(with viewController: UIKit.UIViewController)
   @objc deinit
 }
 @objc @_hasMissingDesignatedInitializers public class BasePublicAd : ObjectiveC.NSObject {
@@ -159,15 +162,15 @@ import zlib
   @objc optional func rewardedAdWillLeaveApplication(_ rewarded: VungleAdsSDK.VungleRewarded)
   @objc optional func rewardedAdDidRewardUser(_ rewarded: VungleAdsSDK.VungleRewarded)
 }
-@_inheritsConvenienceInitializers @objc public class VungleRewarded : VungleAdsSDK.BasePublicAd {
-  @objc weak public var delegate: (any VungleAdsSDK.VungleRewardedDelegate)?
+@_hasMissingDesignatedInitializers @objc final public class VungleRewarded : VungleAdsSDK.TemplateAd {
+  @objc weak final public var delegate: (any VungleAdsSDK.VungleRewardedDelegate)?
   @objc public init(placementId: Swift.String)
-  @objc public func present(with viewController: UIKit.UIViewController)
-  @objc public func setUserId(userId: Swift.String)
-  @objc public func setAlertTitleText(_ text: Swift.String)
-  @objc public func setAlertBodyText(_ text: Swift.String)
-  @objc public func setAlertCloseButtonText(_ text: Swift.String)
-  @objc public func setAlertContinueButtonText(_ text: Swift.String)
+  @objc final public func present(with viewController: UIKit.UIViewController)
+  @objc final public func setUserId(userId: Swift.String)
+  @objc final public func setAlertTitleText(_ text: Swift.String)
+  @objc final public func setAlertBodyText(_ text: Swift.String)
+  @objc final public func setAlertCloseButtonText(_ text: Swift.String)
+  @objc final public func setAlertContinueButtonText(_ text: Swift.String)
   @objc deinit
 }
 @objc public enum ConsentStatus : Swift.Int {
@@ -236,6 +239,9 @@ import zlib
   final public func encode(to encoder: any Swift.Encoder) throws
   @objc deinit
 }
+@objc @_hasMissingDesignatedInitializers public class TemplateAd : VungleAdsSDK.BasePublicAd {
+  @objc deinit
+}
 @_inheritsConvenienceInitializers @objc @_Concurrency.MainActor @preconcurrency public class MediaView : UIKit.UIView {
   @_Concurrency.MainActor @preconcurrency @objc override dynamic public init(frame: CoreFoundation.CGRect)
   @_Concurrency.MainActor @preconcurrency @objc required dynamic public init?(coder: Foundation.NSCoder)
@@ -253,9 +259,11 @@ import zlib
   @objc optional func bannerAdWillLeaveApplication(_ bannerView: VungleAdsSDK.VungleBannerView)
 }
 @_hasMissingDesignatedInitializers @objc @_Concurrency.MainActor @preconcurrency public class VungleBannerView : UIKit.UIView {
-  @objc @_Concurrency.MainActor @preconcurrency weak public var delegate: (any VungleAdsSDK.VungleBannerViewDelegate)?
+  @objc @_Concurrency.MainActor @preconcurrency weak public var delegate: (any VungleAdsSDK.VungleBannerViewDelegate)? {
+    @objc get
+    @objc set
+  }
   @objc @_Concurrency.MainActor @preconcurrency public init(placementId: Swift.String, vungleAdSize: VungleAdsSDK.VungleAdSize)
-  @objc deinit
   @objc @_Concurrency.MainActor @preconcurrency public func load(_ bidPayload: Swift.String? = nil)
   @objc @_Concurrency.MainActor @preconcurrency public func set(extras: VungleAdsSDK.VungleAdsExtras)
   @objc @_Concurrency.MainActor @preconcurrency public var appId: Swift.String {
@@ -272,6 +280,7 @@ import zlib
   }
   @objc @_Concurrency.MainActor @preconcurrency public func getBannerSize() -> CoreFoundation.CGSize
   @_Concurrency.MainActor @preconcurrency @objc override dynamic public func didMoveToSuperview()
+  @objc deinit
 }
 @objc public enum VungleError : Swift.Int {
   case unknownError = 0
@@ -338,6 +347,9 @@ import zlib
   case adLoadFailRetryAfter = 221
   case invalidWaterfallPlacementID = 222
   case staleCachedResponse = 223
+  case adLoadFailEmptyBidPayload = 224
+  case adLoadFailPlacementIDMismatch = 225
+  case privacyIconFallbackError = 226
   case mraidError = 301
   case invalidIfaStatus = 302
   case adExpired = 304
@@ -369,6 +381,10 @@ import zlib
   case storeKitPresentationError = 2007
   case storeOverlayPresentationError = 2008
   case invalidPlayParameter = 2009
+  case storeOverlayDismissalError = 2010
+  case presenterDeallocatedBeforeLoadCompletion = 2011
+  case appImpressionCreationFailed = 2012
+  case handleTapFailed = 2013
   case outOfMemory = 3001
   case vungleOitCreationError = 4000
   case adNoFill = 10001
@@ -446,11 +462,11 @@ extension VungleAdsSDK.VungleAdSize {
   @objc dynamic public class func VungleAdSizeFromCGSize(_ size: CoreFoundation.CGSize) -> VungleAdsSDK.VungleAdSize
   @objc dynamic public class func VungleValidAdSizeFromCGSize(size: CoreFoundation.CGSize, placementId: Swift.String) -> VungleAdsSDK.VungleAdSize
 }
-@available(*, deprecated, message: "BannerSize will be depricated and will be replaced by VungleAdSize")
+@available(*, deprecated, message: "BannerSize will be deprecated and will be replaced by VungleAdSize")
 extension VungleAdsSDK.BannerSize : Swift.Equatable {}
-@available(*, deprecated, message: "BannerSize will be depricated and will be replaced by VungleAdSize")
+@available(*, deprecated, message: "BannerSize will be deprecated and will be replaced by VungleAdSize")
 extension VungleAdsSDK.BannerSize : Swift.Hashable {}
-@available(*, deprecated, message: "BannerSize will be depricated and will be replaced by VungleAdSize")
+@available(*, deprecated, message: "BannerSize will be deprecated and will be replaced by VungleAdSize")
 extension VungleAdsSDK.BannerSize : Swift.RawRepresentable {}
 extension VungleAdsSDK.NativeAdOptionsPosition : Swift.Equatable {}
 extension VungleAdsSDK.NativeAdOptionsPosition : Swift.Hashable {}

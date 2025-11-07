@@ -462,6 +462,9 @@ typedef SWIFT_ENUM(NSInteger, NativeAdOptionsPosition, open) {
 };
 
 
+SWIFT_CLASS("_TtC12VungleAdsSDK10TemplateAd")
+@interface TemplateAd : BasePublicAd
+@end
 
 enum VungleAdSizeType : NSInteger;
 
@@ -568,7 +571,7 @@ SWIFT_CLASS("_TtC12VungleAdsSDK15VungleAdsExtras")
 @protocol VungleBannerDelegate;
 
 SWIFT_CLASS("_TtC12VungleAdsSDK12VungleBanner") SWIFT_DEPRECATED_MSG("VungleBanner class will be deprecated and replaced by VungleBannerView class.")
-@interface VungleBanner : BasePublicAd
+@interface VungleBanner : TemplateAd
 /// The delegate to receive banner ad lifecycle callbacks
 @property (nonatomic, weak) id <VungleBannerDelegate> _Nullable delegate;
 /// This method initializes the Vungle banner ad object.
@@ -596,7 +599,6 @@ SWIFT_CLASS("_TtC12VungleAdsSDK12VungleBanner") SWIFT_DEPRECATED_MSG("VungleBann
 ///
 - (void)presentOn:(UIView * _Nonnull)publisherView;
 @end
-
 
 
 SWIFT_PROTOCOL("_TtP12VungleAdsSDK20VungleBannerDelegate_") SWIFT_DEPRECATED_MSG("VungleBannerDelegate will be deprecated and replaced by VungleBannerViewDelegate protocol.")
@@ -646,8 +648,6 @@ SWIFT_CLASS("_TtC12VungleAdsSDK16VungleBannerView")
 - (void)didMoveToSuperview;
 - (nonnull instancetype)initWithFrame:(CGRect)frame SWIFT_UNAVAILABLE;
 @end
-
-
 
 
 
@@ -701,6 +701,8 @@ typedef SWIFT_ENUM(NSInteger, VungleError, open) {
 /// The asset failed to download or Apple didn’t return to us the temporary location. Message contains the URL
   VungleErrorAssetRequestError = 112,
 /// Apple returned an unexpected response object or failed to load the downloaded data.
+/// Deprecated [iOS: 7.6.0, Android: 7.6.0]
+/// NOTE: This enum value was marked as deprecated in the .proto file
   VungleErrorAssetResponseDataError = 113,
 /// Failed to save the downloaded asset to disk.
   VungleErrorAssetWriteError = 114,
@@ -709,6 +711,8 @@ typedef SWIFT_ENUM(NSInteger, VungleError, open) {
 /// Failed to gzip the token data for the bidding token
   VungleErrorGzipEncodeError = 116,
 /// The status code from the asset download didn’t return 200. Message contains the URL
+/// Deprecated [iOS: 7.6.0, Android: 7.6.0]
+/// NOTE: This enum value was marked as deprecated in the .proto file
   VungleErrorAssetFailedStatusCode = 117,
 /// Failed to serialize the protobuf object for the request body
   VungleErrorProtobufSerializationError = 118,
@@ -733,13 +737,13 @@ typedef SWIFT_ENUM(NSInteger, VungleError, open) {
   VungleErrorInvalidTpatKey = 128,
 /// The template requested the SDK to fire tpat URLs underneath a key, but there are no URLs in the list.
   VungleErrorEmptyTpatError = 129,
-/// MRAID JS file download failed
+/// MRAID JS file download failed. Deprecated [iOS: 7.6.0, Android: 7.6.0]
   VungleErrorMraidDownloadJsError = 130,
-/// Failed to save MRAID JS files to disk
+/// Failed to save MRAID JS files to disk. Deprecated [iOS: 7.6.0, Android: 7.6.0]
   VungleErrorMraidJsWriteFailed = 131,
 /// OMSDK JS file download failed
   VungleErrorOmsdkDownloadJsError = 132,
-/// Failed to save OMSDK JS files to disk
+/// Failed to save OMSDK JS files to disk. Deprecated [iOS: 7.6.0, Android: Still in use]
   VungleErrorOmsdkJsWriteFailed = 133,
 /// Failed to get the App/play store region
   VungleErrorStoreRegionCodeError = 134,
@@ -793,10 +797,17 @@ typedef SWIFT_ENUM(NSInteger, VungleError, open) {
   VungleErrorAdResponseRetryAfter = 220,
 /// Failed to load ad due to server busy while retry after duration is active.
   VungleErrorAdLoadFailRetryAfter = 221,
-/// Failed to load ad due to invalid Waterfall placement id.
+/// Failed to load ad due to invalid Waterfall placement id. Deprecated [iOS: 7.6.0, Android: 7.6.0]. Replaced with 224.
+/// NOTE: This enum value was marked as deprecated in the .proto file
   VungleErrorInvalidWaterfallPlacementID = 222,
 /// Cached data is stale, i.e. content-length of cached response is not the same as remote
   VungleErrorStaleCachedResponse = 223,
+/// Failed to load ad due to request with empty bid payload for bidding placements.
+  VungleErrorAdLoadFailEmptyBidPayload = 224,
+/// Detected placement ID mismatch between requested placement and placement in adm.
+  VungleErrorAdLoadFailPlacementIDMismatch = 225,
+/// Failed to create a privacy icon from the string
+  VungleErrorPrivacyIconFallbackError = 226,
 /// For logging errors provided from the template
   VungleErrorMraidError = 301,
 /// The IFA changed values between loading and playing the ad object.
@@ -860,6 +871,14 @@ typedef SWIFT_ENUM(NSInteger, VungleError, open) {
   VungleErrorStoreOverlayPresentationError = 2008,
 /// The SDK detected invalid View/ViewController to present an ad.
   VungleErrorInvalidPlayParameter = 2009,
+/// The error occurred when the SDK tried dismissing SKO.
+  VungleErrorStoreOverlayDismissalError = 2010,
+/// The ad presenter is deallocated before web view facade load completion.
+  VungleErrorPresenterDeallocatedBeforeLoadCompletion = 2011,
+/// The SDK failed to create <code>AppImpression</code> for AAK attribution
+  VungleErrorAppImpressionCreationFailed = 2012,
+/// Unable to open Reengagement Url with handleTap api
+  VungleErrorHandleTapFailed = 2013,
 /// Memory Checks
   VungleErrorOutOfMemory = 3001,
 /// Failed to get OS Installation Time. Introduced in 7.5.0 SDK.
@@ -882,7 +901,7 @@ typedef SWIFT_ENUM(NSInteger, VungleError, open) {
 @class UIViewController;
 
 SWIFT_CLASS("_TtC12VungleAdsSDK18VungleInterstitial")
-@interface VungleInterstitial : BasePublicAd
+@interface VungleInterstitial : TemplateAd
 /// The delegate to receive interstitial ad lifecycle callbacks
 @property (nonatomic, weak) id <VungleInterstitialDelegate> _Nullable delegate;
 - (nonnull instancetype)initWithPlacementId:(NSString * _Nonnull)placementId OBJC_DESIGNATED_INITIALIZER;
@@ -893,7 +912,6 @@ SWIFT_CLASS("_TtC12VungleAdsSDK18VungleInterstitial")
 ///
 - (void)presentWith:(UIViewController * _Nonnull)viewController;
 @end
-
 
 
 SWIFT_PROTOCOL("_TtP12VungleAdsSDK26VungleInterstitialDelegate_")
@@ -966,7 +984,6 @@ SWIFT_CLASS("_TtC12VungleAdsSDK12VungleNative")
 @end
 
 
-
 SWIFT_PROTOCOL("_TtP12VungleAdsSDK20VungleNativeDelegate_")
 @protocol VungleNativeDelegate <NSObject>
 @optional
@@ -992,7 +1009,7 @@ SWIFT_CLASS("_TtC12VungleAdsSDK21VunglePrivacySettings")
 @protocol VungleRewardedDelegate;
 
 SWIFT_CLASS("_TtC12VungleAdsSDK14VungleRewarded")
-@interface VungleRewarded : BasePublicAd
+@interface VungleRewarded : TemplateAd
 /// The delegate to receive rewarded ad lifecycle callbacks
 @property (nonatomic, weak) id <VungleRewardedDelegate> _Nullable delegate;
 - (nonnull instancetype)initWithPlacementId:(NSString * _Nonnull)placementId OBJC_DESIGNATED_INITIALIZER;
@@ -1008,7 +1025,6 @@ SWIFT_CLASS("_TtC12VungleAdsSDK14VungleRewarded")
 - (void)setAlertCloseButtonText:(NSString * _Nonnull)text;
 - (void)setAlertContinueButtonText:(NSString * _Nonnull)text;
 @end
-
 
 
 SWIFT_PROTOCOL("_TtP12VungleAdsSDK22VungleRewardedDelegate_")
@@ -1499,6 +1515,9 @@ typedef SWIFT_ENUM(NSInteger, NativeAdOptionsPosition, open) {
 };
 
 
+SWIFT_CLASS("_TtC12VungleAdsSDK10TemplateAd")
+@interface TemplateAd : BasePublicAd
+@end
 
 enum VungleAdSizeType : NSInteger;
 
@@ -1605,7 +1624,7 @@ SWIFT_CLASS("_TtC12VungleAdsSDK15VungleAdsExtras")
 @protocol VungleBannerDelegate;
 
 SWIFT_CLASS("_TtC12VungleAdsSDK12VungleBanner") SWIFT_DEPRECATED_MSG("VungleBanner class will be deprecated and replaced by VungleBannerView class.")
-@interface VungleBanner : BasePublicAd
+@interface VungleBanner : TemplateAd
 /// The delegate to receive banner ad lifecycle callbacks
 @property (nonatomic, weak) id <VungleBannerDelegate> _Nullable delegate;
 /// This method initializes the Vungle banner ad object.
@@ -1633,7 +1652,6 @@ SWIFT_CLASS("_TtC12VungleAdsSDK12VungleBanner") SWIFT_DEPRECATED_MSG("VungleBann
 ///
 - (void)presentOn:(UIView * _Nonnull)publisherView;
 @end
-
 
 
 SWIFT_PROTOCOL("_TtP12VungleAdsSDK20VungleBannerDelegate_") SWIFT_DEPRECATED_MSG("VungleBannerDelegate will be deprecated and replaced by VungleBannerViewDelegate protocol.")
@@ -1683,8 +1701,6 @@ SWIFT_CLASS("_TtC12VungleAdsSDK16VungleBannerView")
 - (void)didMoveToSuperview;
 - (nonnull instancetype)initWithFrame:(CGRect)frame SWIFT_UNAVAILABLE;
 @end
-
-
 
 
 
@@ -1738,6 +1754,8 @@ typedef SWIFT_ENUM(NSInteger, VungleError, open) {
 /// The asset failed to download or Apple didn’t return to us the temporary location. Message contains the URL
   VungleErrorAssetRequestError = 112,
 /// Apple returned an unexpected response object or failed to load the downloaded data.
+/// Deprecated [iOS: 7.6.0, Android: 7.6.0]
+/// NOTE: This enum value was marked as deprecated in the .proto file
   VungleErrorAssetResponseDataError = 113,
 /// Failed to save the downloaded asset to disk.
   VungleErrorAssetWriteError = 114,
@@ -1746,6 +1764,8 @@ typedef SWIFT_ENUM(NSInteger, VungleError, open) {
 /// Failed to gzip the token data for the bidding token
   VungleErrorGzipEncodeError = 116,
 /// The status code from the asset download didn’t return 200. Message contains the URL
+/// Deprecated [iOS: 7.6.0, Android: 7.6.0]
+/// NOTE: This enum value was marked as deprecated in the .proto file
   VungleErrorAssetFailedStatusCode = 117,
 /// Failed to serialize the protobuf object for the request body
   VungleErrorProtobufSerializationError = 118,
@@ -1770,13 +1790,13 @@ typedef SWIFT_ENUM(NSInteger, VungleError, open) {
   VungleErrorInvalidTpatKey = 128,
 /// The template requested the SDK to fire tpat URLs underneath a key, but there are no URLs in the list.
   VungleErrorEmptyTpatError = 129,
-/// MRAID JS file download failed
+/// MRAID JS file download failed. Deprecated [iOS: 7.6.0, Android: 7.6.0]
   VungleErrorMraidDownloadJsError = 130,
-/// Failed to save MRAID JS files to disk
+/// Failed to save MRAID JS files to disk. Deprecated [iOS: 7.6.0, Android: 7.6.0]
   VungleErrorMraidJsWriteFailed = 131,
 /// OMSDK JS file download failed
   VungleErrorOmsdkDownloadJsError = 132,
-/// Failed to save OMSDK JS files to disk
+/// Failed to save OMSDK JS files to disk. Deprecated [iOS: 7.6.0, Android: Still in use]
   VungleErrorOmsdkJsWriteFailed = 133,
 /// Failed to get the App/play store region
   VungleErrorStoreRegionCodeError = 134,
@@ -1830,10 +1850,17 @@ typedef SWIFT_ENUM(NSInteger, VungleError, open) {
   VungleErrorAdResponseRetryAfter = 220,
 /// Failed to load ad due to server busy while retry after duration is active.
   VungleErrorAdLoadFailRetryAfter = 221,
-/// Failed to load ad due to invalid Waterfall placement id.
+/// Failed to load ad due to invalid Waterfall placement id. Deprecated [iOS: 7.6.0, Android: 7.6.0]. Replaced with 224.
+/// NOTE: This enum value was marked as deprecated in the .proto file
   VungleErrorInvalidWaterfallPlacementID = 222,
 /// Cached data is stale, i.e. content-length of cached response is not the same as remote
   VungleErrorStaleCachedResponse = 223,
+/// Failed to load ad due to request with empty bid payload for bidding placements.
+  VungleErrorAdLoadFailEmptyBidPayload = 224,
+/// Detected placement ID mismatch between requested placement and placement in adm.
+  VungleErrorAdLoadFailPlacementIDMismatch = 225,
+/// Failed to create a privacy icon from the string
+  VungleErrorPrivacyIconFallbackError = 226,
 /// For logging errors provided from the template
   VungleErrorMraidError = 301,
 /// The IFA changed values between loading and playing the ad object.
@@ -1897,6 +1924,14 @@ typedef SWIFT_ENUM(NSInteger, VungleError, open) {
   VungleErrorStoreOverlayPresentationError = 2008,
 /// The SDK detected invalid View/ViewController to present an ad.
   VungleErrorInvalidPlayParameter = 2009,
+/// The error occurred when the SDK tried dismissing SKO.
+  VungleErrorStoreOverlayDismissalError = 2010,
+/// The ad presenter is deallocated before web view facade load completion.
+  VungleErrorPresenterDeallocatedBeforeLoadCompletion = 2011,
+/// The SDK failed to create <code>AppImpression</code> for AAK attribution
+  VungleErrorAppImpressionCreationFailed = 2012,
+/// Unable to open Reengagement Url with handleTap api
+  VungleErrorHandleTapFailed = 2013,
 /// Memory Checks
   VungleErrorOutOfMemory = 3001,
 /// Failed to get OS Installation Time. Introduced in 7.5.0 SDK.
@@ -1919,7 +1954,7 @@ typedef SWIFT_ENUM(NSInteger, VungleError, open) {
 @class UIViewController;
 
 SWIFT_CLASS("_TtC12VungleAdsSDK18VungleInterstitial")
-@interface VungleInterstitial : BasePublicAd
+@interface VungleInterstitial : TemplateAd
 /// The delegate to receive interstitial ad lifecycle callbacks
 @property (nonatomic, weak) id <VungleInterstitialDelegate> _Nullable delegate;
 - (nonnull instancetype)initWithPlacementId:(NSString * _Nonnull)placementId OBJC_DESIGNATED_INITIALIZER;
@@ -1930,7 +1965,6 @@ SWIFT_CLASS("_TtC12VungleAdsSDK18VungleInterstitial")
 ///
 - (void)presentWith:(UIViewController * _Nonnull)viewController;
 @end
-
 
 
 SWIFT_PROTOCOL("_TtP12VungleAdsSDK26VungleInterstitialDelegate_")
@@ -2003,7 +2037,6 @@ SWIFT_CLASS("_TtC12VungleAdsSDK12VungleNative")
 @end
 
 
-
 SWIFT_PROTOCOL("_TtP12VungleAdsSDK20VungleNativeDelegate_")
 @protocol VungleNativeDelegate <NSObject>
 @optional
@@ -2029,7 +2062,7 @@ SWIFT_CLASS("_TtC12VungleAdsSDK21VunglePrivacySettings")
 @protocol VungleRewardedDelegate;
 
 SWIFT_CLASS("_TtC12VungleAdsSDK14VungleRewarded")
-@interface VungleRewarded : BasePublicAd
+@interface VungleRewarded : TemplateAd
 /// The delegate to receive rewarded ad lifecycle callbacks
 @property (nonatomic, weak) id <VungleRewardedDelegate> _Nullable delegate;
 - (nonnull instancetype)initWithPlacementId:(NSString * _Nonnull)placementId OBJC_DESIGNATED_INITIALIZER;
@@ -2045,7 +2078,6 @@ SWIFT_CLASS("_TtC12VungleAdsSDK14VungleRewarded")
 - (void)setAlertCloseButtonText:(NSString * _Nonnull)text;
 - (void)setAlertContinueButtonText:(NSString * _Nonnull)text;
 @end
-
 
 
 SWIFT_PROTOCOL("_TtP12VungleAdsSDK22VungleRewardedDelegate_")
